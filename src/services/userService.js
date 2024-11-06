@@ -1,35 +1,33 @@
-export class UserService {
-	constructor(_userRepository) {
-		this.userRepository = _userRepository;
+import { createUser, findUser } from "../repositories/userRepository.js";
+
+async function registerUser(userDetails) {
+	const user = await findUser({
+		email: userDetails.email,
+		mobileNumber: userDetails.mobileNumber,
+	});
+
+	if (user) {
+		throw {
+			reason: "User with this email or mobileNumber already exists",
+			statusCode: 400,
+		};
 	}
 
-	async registerUser(userDetails) {
-		const user = await this.userRepository.findUser({
-			email: userDetails.email,
-			mobileNumber: userDetails.mobileNumber,
-		});
+	const newUser = await createUser({
+		email: userDetails.email,
+		mobileNumber: userDetails.mobileNumber,
+		firstName: userDetails.firstName,
+		lastName: userDetails.lastName,
+		password: userDetails.password,
+	});
 
-		if (user) {
-			throw {
-				reason: "User with this email or mobileNumber already exists",
-				statusCode: 400,
-			};
-		}
-
-		const newUser = await this.userRepository.createUser({
-			email: userDetails.email,
-			mobileNumber: userDetails.mobileNumber,
-			firstName: userDetails.firstName,
-			lastName: userDetails.lastName,
-			password: userDetails.password,
-		});
-
-		if (!newUser) {
-			throw {
-				reason: "something went wrong, cannot create user",
-				statusCode: 500,
-			};
-		}
-		return newUser;
+	if (!newUser) {
+		throw {
+			reason: "something went wrong, cannot create user",
+			statusCode: 500,
+		};
 	}
+	return newUser;
 }
+
+export { registerUser };

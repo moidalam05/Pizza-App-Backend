@@ -1,13 +1,10 @@
-import { UserService } from "../services/userService.js";
-import { UserRepository } from "../repositories/userRepository.js";
+import { registerUser } from "../services/userService.js";
 
-export async function createUser(req, res) {
+async function createUser(req, res) {
 	console.log(req.body);
 
-	const userService = new UserService(new UserRepository());
-
 	try {
-		const response = await userService.registerUser(req.body);
+		const response = await registerUser(req.body);
 
 		return res.status(201).json({
 			message: "User created successfully",
@@ -24,3 +21,5 @@ export async function createUser(req, res) {
 		});
 	}
 }
+
+export { createUser };
