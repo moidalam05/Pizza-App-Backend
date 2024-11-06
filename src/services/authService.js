@@ -36,16 +36,7 @@ async function loginUser(authDetails) {
 		{ expiresIn: serverConfig.JWT_EXPIRY }
 	);
 
-	return {
-		token,
-		data: {
-			id: user._id,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
-			mobileNumber: user.mobileNumber,
-		},
-	};
+	return token;
 }
 
 export { loginUser };
