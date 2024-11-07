@@ -8,4 +8,4 @@ cloudinary.config({
 	api_secret: serverConfig.CLOUDINARY_API_SECRET,
 });
 
-export { cloudinary };
+export default cloudinary;
