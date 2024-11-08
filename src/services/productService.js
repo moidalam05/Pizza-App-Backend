@@ -43,6 +43,19 @@ async function GetProduct(productId) {
 
 async function DeleteProduct(productId) {
 	const response = await deleteProductById(productId);
+	// delete image from cloudinary
+	if (response.productImage) {
+		try {
+			const publicId = response.productImage
+				.split("/")
+				.pop()
+				.split(".")[0];
+			await cloudinary.uploader.destroy(publicId);
+		} catch (error) {
+			console.log(error);
+			throw new InternalServerError();
+		}
+	}
 
 	if (!response) {
 		throw new NotFoundError("Product");
