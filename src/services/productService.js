@@ -1,6 +1,12 @@
 import cloudinary from "../config/cloudinaryConfig.js";
-import { createProduct } from "../repositories/productRepository.js";
+import {
+	createProduct,
+	deleteProductById,
+	getProductById,
+} from "../repositories/productRepository.js";
 import fs from "fs/promises";
+import InternalServerError from "../utils/internalServerError.js";
+import NotFoundError from "../utils/notFoundError.js";
 
 async function CreateProduct(productDetails) {
 	const imagePath = productDetails.imagePath;
@@ -13,7 +19,7 @@ async function CreateProduct(productDetails) {
 			await fs.unlink(imagePath);
 		} catch (error) {
 			console.log(error);
-			throw { reason: "Image upload failed", statusCode: 500 };
+			throw new InternalServerError();
 		}
 	}
 
@@ -22,11 +28,27 @@ async function CreateProduct(productDetails) {
 		productImage,
 	});
 
-	if (!product) {
-		throw { reason: "Product not created", statusCode: 500 };
-	}
-
 	return product;
 }
 
-export { CreateProduct };
+async function GetProduct(productId) {
+	const response = await getProductById(productId);
+
+	if (!response) {
+		throw new NotFoundError("Product");
+	}
+
+	return response;
+}
+
+async function DeleteProduct(productId) {
+	const response = await deleteProductById(productId);
+
+	if (!response) {
+		throw new NotFoundError("Product");
+	}
+
+	return response;
+}
+
+export { CreateProduct, GetProduct, DeleteProduct };

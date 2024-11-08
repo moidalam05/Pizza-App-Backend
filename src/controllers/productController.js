@@ -1,4 +1,9 @@
-import { CreateProduct } from "../services/productService.js";
+import {
+	CreateProduct,
+	DeleteProduct,
+	GetProduct,
+} from "../services/productService.js";
+import AppError from "../utils/appError.js";
 
 async function addProduct(req, res) {
 	try {
@@ -18,14 +23,78 @@ async function addProduct(req, res) {
 			error: {},
 		});
 	} catch (error) {
+		if (error instanceof AppError) {
+			return res.status(error.statusCode).json({
+				success: false,
+				message: error.message,
+				data: {},
+				error: error,
+			});
+		}
 		console.log(error);
-		return res.status(error.statusCode).json({
+		return res.status(500).json({
 			success: false,
-			message: error.reason,
+			message: "Something went wrong!",
 			data: {},
 			error: error,
 		});
 	}
 }
 
-export { addProduct };
+async function getProduct(req, res) {
+	try {
+		const response = await GetProduct(req.params.id);
+		return res.status(200).json({
+			success: true,
+			message: "Product retrieved successfully",
+			data: response,
+			error: {},
+		});
+	} catch (error) {
+		if (error instanceof AppError) {
+			return res.status(error.statusCode).json({
+				success: false,
+				message: error.message,
+				data: {},
+				error: error,
+			});
+		}
+		console.log(error);
+		return res.status(500).json({
+			success: false,
+			message: "Something went wrong!",
+			data: {},
+			error: error,
+		});
+	}
+}
+
+async function deleteProduct(req, res) {
+	try {
+		const response = await DeleteProduct(req.params.id);
+		return res.status(200).json({
+			success: true,
+			message: "Product deleted successfully",
+			data: response,
+			error: {},
+		});
+	} catch (error) {
+		if (error instanceof AppError) {
+			return res.status(error.statusCode).json({
+				success: false,
+				message: error.message,
+				data: {},
+				error: error,
+			});
+		}
+		console.log(error);
+		return res.status(500).json({
+			success: false,
+			message: "Something went wrong!",
+			data: {},
+			error: error,
+		});
+	}
+}
+
+export { addProduct, getProduct, deleteProduct };
