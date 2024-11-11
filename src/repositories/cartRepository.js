@@ -1,6 +1,7 @@
 import Cart from "../schema/cartSchema.js";
 import BadRequestError from "../utils/badRequestError.js";
 import InternalServerError from "../utils/internalServerError.js";
+import NotFoundError from "../utils/notFoundError.js";
 
 async function createCart(userId) {
 	try {
@@ -35,4 +36,22 @@ async function getCartByUserId(userId) {
 	}
 }
 
-export { createCart, getCartByUserId };
+async function clearCart(userId) {
+	try {
+		const cart = await Cart.findOne({
+			user: userId,
+		});
+		if (!cart) {
+			throw new NotFoundError("cart");
+		}
+
+		cart.items = [];
+		await cart.save();
+		return cart;
+	} catch (error) {
+		console.log(error);
+		throw new InternalServerError();
+	}
+}
+
+export { createCart, getCartByUserId, clearCart };

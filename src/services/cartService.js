@@ -1,4 +1,4 @@
-import { getCartByUserId } from "../repositories/cartRepository.js";
+import { clearCart, getCartByUserId } from "../repositories/cartRepository.js";
 import { getProductById } from "../repositories/productRepository.js";
 import AppError from "../utils/appError.js";
 import BadRequestError from "../utils/badRequestError.js";
@@ -76,4 +76,9 @@ async function modifyCart(userId, productId, shouldAdd = true) {
 	return cart;
 }
 
-export { getCart, modifyCart };
+async function clearProductsFromCart(userId) {
+	const response = await clearCart(userId);
+	return response;
+}
+
+export { getCart, modifyCart, clearProductsFromCart };
