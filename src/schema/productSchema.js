@@ -19,6 +19,11 @@ const productSchema = new mongoose.Schema(
 		productImage: {
 			type: String,
 		},
+		quantity: {
+			type: Number,
+			required: [true, "Product quantity is required"],
+			default: 10,
+		},
 		price: {
 			type: Number,
 			required: [true, "Product price is required"],
@@ -44,5 +49,3 @@ const productSchema = new mongoose.Schema(
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;
-
-
