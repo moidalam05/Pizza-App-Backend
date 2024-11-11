@@ -30,8 +30,9 @@ async function loginUser(authDetails) {
 	}
 
 	// If password is correct then generate token
+	const userRole = user.role ? user.role : "USER";
 	const token = jwt.sign(
-		{ email: user.email, id: user._id },
+		{ email: user.email, id: user._id, role: userRole },
 		serverConfig.JWT_SECRET,
 		{ expiresIn: serverConfig.JWT_EXPIRY }
 	);

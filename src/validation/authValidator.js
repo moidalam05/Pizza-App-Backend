@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import serverConfig from "../config/serverConfig.js";
+import UnauthorizedError from "../utils/unauthorizedError.js";
 
 async function isLoggedIn(req, res, next) {
 	// Get the token from the request
@@ -15,26 +16,50 @@ async function isLoggedIn(req, res, next) {
 		});
 	}
 
-	// If the token is present then verify the token
-	const decoded = jwt.verify(token, serverConfig.JWT_SECRET);
+	try {
+		// Verify the token and get the user details from the token
+		const decoded = jwt.verify(token, serverConfig.JWT_SECRET);
 
-	// If the token is invalid then return the response
-	if (!decoded) {
+		// If the token is invalid then return the error message
+		if (!decoded) {
+			throw new UnauthorizedError();
+		}
+
+		// If the token is valid then set the user details in the request object
+		req.user = {
+			email: decoded.email,
+			id: decoded.id,
+			role: decoded.role,
+		};
+		next();
+	} catch (error) {
+		// If the token is invalid then return the error message
 		return res.status(401).json({
 			success: false,
 			message: "Invalid Token Provided",
 			data: {},
-			error: "Not authenticated",
+			error: error,
 		});
 	}
-
-	// If the token is valid then pass the control to the next middleware
-	req.user = {
-		email: decoded.email,
-		id: decoded.id,
-	};
-
-	next();
 }
 
-export { isLoggedIn };
+// This function will be used to check if the user is an admin or not
+function isAdmin(req, res, next) {
+	const loggedInUser = req.user;
+
+	if (loggedInUser.role === "ADMIN") {
+		next();
+	} else {
+		return res.status(401).json({
+			success: false,
+			message: "You are not authorized to access this resource",
+			data: {},
+			error: {
+				reason: "Unauthorized Access",
+				statusCode: 401,
+			},
+		});
+	}
+}
+
+export { isLoggedIn, isAdmin };
