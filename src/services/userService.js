@@ -1,4 +1,5 @@
 import { createUser, findUser } from "../repositories/userRepository.js";
+import { createCart } from "../repositories/cartRepository.js";
 
 async function registerUser(userDetails) {
 	const user = await findUser({
@@ -27,6 +28,9 @@ async function registerUser(userDetails) {
 			statusCode: 500,
 		};
 	}
+
+	await createCart(newUser._id);
+
 	return newUser;
 }
 

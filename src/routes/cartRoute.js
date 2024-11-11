@@ -1,8 +1,9 @@
 import express from "express";
-import { getCartById } from "../controllers/cartController.js";
+import { getCartByUser } from "../controllers/cartController.js";
+import { isLoggedIn } from "../validation/authValidator.js";
 
 const cartRouter = express.Router();
 
-cartRouter.get("/:id", getCartById);
+cartRouter.get("/", isLoggedIn, getCartByUser);
 
 export default cartRouter;
