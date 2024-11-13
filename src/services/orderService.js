@@ -2,7 +2,12 @@ import { clearCart, getCartByUserId } from "../repositories/cartRepository.js";
 import BadRequestError from "../utils/badRequestError.js";
 import NotFoundError from "../utils/notFoundError.js";
 import { findUser } from "../repositories/userRepository.js";
-import { createNewOrder } from "../repositories/orderRepository.js";
+import {
+	createNewOrder,
+	getOrderById,
+	getOrdersByUserId,
+	updateOrderStatus,
+} from "../repositories/orderRepository.js";
 import InternalServerError from "../utils/internalServerError.js";
 
 async function createOrder(userId, paymentMethod) {
@@ -41,4 +46,42 @@ async function createOrder(userId, paymentMethod) {
 	return order;
 }
 
-export { createOrder };
+async function getAllOrdersCreatedByUser(userId) {
+	// Logic to get all orders created by user
+	const orders = await getOrdersByUserId(userId);
+
+	if (!orders) {
+		throw new NotFoundError("Orders");
+	}
+
+	return orders;
+}
+
+async function getOrderDetailsById(orderId) {
+	// Logic to get all orders created by user
+	const order = await getOrderById(orderId);
+
+	if (!order) {
+		throw new NotFoundError("Orders");
+	}
+
+	return order;
+}
+
+async function updateOrder(orderId, status) {
+	// Logic to update order status
+	const order = await updateOrderStatus(orderId, status);
+
+	if (!order) {
+		throw new InternalServerError();
+	}
+
+	return order;
+}
+
+export {
+	createOrder,
+	getAllOrdersCreatedByUser,
+	getOrderDetailsById,
+	updateOrder,
+};
