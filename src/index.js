@@ -6,7 +6,7 @@ import userRouter from "./routes/userRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import authRouter from "./routes/authRoute.js";
 import productRouter from "./routes/productRoute.js";
-// import uploader from "./middlewares/multerMiddleware.js";
+import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.use("/users", userRouter);
 app.use("/carts", cartRouter);
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
+app.use("/orders", orderRouter);
 
 app.listen(serverConfig.PORT, async () => {
 	console.log(`Server is running on port ${serverConfig.PORT}`);
