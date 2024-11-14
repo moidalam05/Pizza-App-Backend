@@ -28,4 +28,27 @@ async function login(req, res) {
 	}
 }
 
-export { login };
+async function logout(req, res) {
+	try {
+		res.cookie("authToken", "", {
+			httpOnly: true,
+			secure: false,
+			maxAge: 0,
+		});
+		res.status(200).json({
+			success: true,
+			message: "User logged out successfully",
+			data: {},
+			error: {},
+		});
+	} catch (error) {
+		res.status(error.statusCode).json({
+			success: false,
+			message: error.message,
+			data: {},
+			error: error,
+		});
+	}
+}
+
+export { login, logout };
