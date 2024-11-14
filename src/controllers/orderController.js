@@ -124,7 +124,7 @@ async function cancelOrder(req, res) {
 
 async function changeOrderStatus(req, res) {
 	try {
-		const order = await updateOrder(req.body.orderId, req.body.status);
+		const order = await updateOrder(req.params.orderId, req.body.status);
 
 		return res.status(201).json({
 			success: true,

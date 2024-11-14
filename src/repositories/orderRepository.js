@@ -43,9 +43,13 @@ async function getOrderById(orderId) {
 
 async function updateOrderStatus(orderId, status) {
 	try {
-		const order = await Order.findByIdAndUpdate(orderId, {
-			status: status,
-		}).populate("items.product");
+		const order = await Order.findByIdAndUpdate(
+			orderId,
+			{
+				status: status,
+			},
+			{ new: true }
+		).populate("items.product");
 		return order;
 	} catch (error) {
 		console.log(error);
