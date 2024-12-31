@@ -6,6 +6,9 @@
 	"scripts": {
 		"start": "node ./src/index.js"
 	},
+	"engines": {
+		"node": "18.x"
+	},
 	"author": "Moid Alam",
 	"license": "ISC",
 	"description": "",
