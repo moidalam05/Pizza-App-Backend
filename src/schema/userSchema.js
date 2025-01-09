@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema(
 
 		lastName: {
 			type: String,
-			required: [true, "First name is required"],
 			trim: true,
 			minLength: [3, "First name must be at least 3 characters long"],
 			maxLength: [20, "First name must be at most 20 characters long"],
@@ -57,14 +56,14 @@ const userSchema = new mongoose.Schema(
 			default: "USER",
 		},
 
-		address:{
+		address: {
 			type: String,
 			// required: [true, "Address is required"],
 			trim: true,
 			minLength: [3, "Address must be at least 3 characters long"],
 			maxLength: [100, "Address must be at most 100 characters long"],
 			lowercase: true,
-		}
+		},
 	},
 	{ timestamps: true, versionKey: false }
 );

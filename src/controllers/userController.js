@@ -1,4 +1,5 @@
 import { registerUser } from "../services/userService.js";
+import AppError from "../utils/appError.js";
 
 async function createUser(req, res) {
 	console.log(req.body);
@@ -13,6 +14,14 @@ async function createUser(req, res) {
 			error: {},
 		});
 	} catch (error) {
+		if (error instanceof AppError) {
+			return res.status(error.statusCode).json({
+				success: false,
+				message: error.message,
+				data: {},
+				error: error,
+			});
+		}
 		return res.status(error.statusCode).json({
 			message: error.reason,
 			success: false,

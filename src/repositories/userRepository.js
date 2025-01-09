@@ -1,4 +1,6 @@
 import User from "../schema/userSchema.js";
+import BadRequestError from "../utils/badRequestError.js";
+import InternalServerError from "../utils/internalServerError.js";
 
 async function findUser(parameters) {
 	try {
@@ -18,11 +20,16 @@ async function createUser(userDetails) {
 		const response = await User.create(userDetails);
 		return response;
 	} catch (error) {
+		if (error.name == "ValidationError") {
+			const errorMessageList = Object.keys(error.errors).map(
+				(property) => {
+					return error.errors[property].message;
+				}
+			);
+			throw new BadRequestError(errorMessageList);
+		}
 		console.log(error);
-		throw {
-			reason: "something went wrong, cannot create user",
-			statusCode: 500,
-		};
+		throw new InternalServerError();
 	}
 }
 
