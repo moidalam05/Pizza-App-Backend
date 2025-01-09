@@ -7,8 +7,10 @@ import cartRouter from "./routes/cartRoute.js";
 import authRouter from "./routes/authRoute.js";
 import productRouter from "./routes/productRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 
 app.use(cookieParser());
 app.use(express.json());
