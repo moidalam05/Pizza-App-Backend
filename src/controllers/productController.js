@@ -2,6 +2,7 @@ import {
 	CreateProduct,
 	DeleteProduct,
 	GetProduct,
+	GetProducts,
 } from "../services/productService.js";
 import AppError from "../utils/appError.js";
 
@@ -69,6 +70,34 @@ async function getProduct(req, res) {
 	}
 }
 
+async function getProducts(req, res) {
+	try {
+		const response = await GetProducts();
+		return res.status(200).json({
+			success: true,
+			message: "All Products retrieved successfully",
+			data: response,
+			error: {},
+		});
+	} catch (error) {
+		if (error instanceof AppError) {
+			return res.status(error.statusCode).json({
+				success: false,
+				message: error.message,
+				data: {},
+				error: error,
+			});
+		}
+		console.log(error);
+		return res.status(500).json({
+			success: false,
+			message: "Something went wrong!",
+			data: {},
+			error: error,
+		});
+	}
+}
+
 async function deleteProduct(req, res) {
 	try {
 		const response = await DeleteProduct(req.params.id);
@@ -97,4 +126,4 @@ async function deleteProduct(req, res) {
 	}
 }
 
-export { addProduct, getProduct, deleteProduct };
+export { addProduct, getProduct, getProducts, deleteProduct };

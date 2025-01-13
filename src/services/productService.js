@@ -2,6 +2,7 @@ import cloudinary from "../config/cloudinaryConfig.js";
 import {
 	createProduct,
 	deleteProductById,
+	getAllProducts,
 	getProductById,
 } from "../repositories/productRepository.js";
 import fs from "fs/promises";
@@ -41,6 +42,16 @@ async function GetProduct(productId) {
 	return response;
 }
 
+async function GetProducts() {
+	const response = await getAllProducts();
+
+	if (!response) {
+		throw new NotFoundError("Product");
+	}
+
+	return response;
+}
+
 async function DeleteProduct(productId) {
 	const response = await deleteProductById(productId);
 	// delete image from cloudinary
@@ -64,4 +75,4 @@ async function DeleteProduct(productId) {
 	return response;
 }
 
-export { CreateProduct, GetProduct, DeleteProduct };
+export { CreateProduct, GetProduct, GetProducts, DeleteProduct };
