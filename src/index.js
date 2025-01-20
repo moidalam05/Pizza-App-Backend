@@ -10,10 +10,12 @@ import orderRouter from "./routes/orderRoute.js";
 import cors from "cors";
 
 const app = express();
-app.use(cors({
-	origin: 'http://localhost:5173',
-	credentials: true
-}));
+app.use(
+	cors({
+		origin: "https://pizza-40pk15lar-moid786s-projects.vercel.app",
+		credentials: true,
+	})
+);
 
 app.use(cookieParser());
 app.use(express.json());
