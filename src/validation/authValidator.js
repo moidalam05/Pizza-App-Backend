@@ -37,6 +37,7 @@ async function isLoggedIn(req, res, next) {
 			res.cookie("authToken", "", {
 				httpOnly: true,
 				secure: serverConfig.COOKIE_SECURE,
+				sameSite: 'None',
 				maxAge: 7 * 24 * 60 * 60 * 1000,
 			});
 			return res.status(200).json({
