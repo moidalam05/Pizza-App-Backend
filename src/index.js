@@ -12,9 +12,7 @@ import cors from "cors";
 const app = express();
 app.use(
 	cors({
-		origin:
-			serverConfig.FRONTEND_URL ||
-			"https://pizza-aehenzvnb-moid786s-projects.vercel.app",
+		origin: serverConfig.FRONTEND_URL,
 		credentials: true,
 	})
 );

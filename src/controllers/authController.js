@@ -1,5 +1,6 @@
 import { response } from "express";
 import { loginUser } from "../services/authService.js";
+import serverConfig from "../config/serverConfig.js";
 
 async function login(req, res) {
 	try {
@@ -8,7 +9,7 @@ async function login(req, res) {
 
 		res.cookie("authToken", response.token, {
 			httpOnly: true,
-			secure: false,
+			secure: serverConfig.COOKIE_SECURE,
 			maxAge: 3 * 24 * 60 * 60 * 1000,
 		});
 
@@ -35,7 +36,7 @@ async function logout(req, res) {
 	try {
 		res.cookie("authToken", "", {
 			httpOnly: true,
-			secure: false,
+			secure: serverConfig.COOKIE_SECURE,
 			maxAge: 0,
 		});
 		res.status(200).json({
